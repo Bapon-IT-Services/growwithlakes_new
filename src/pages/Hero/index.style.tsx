@@ -395,6 +395,12 @@ export const VisualStatus = styled.span`
   color: ${({ theme }) => theme.colors.muted};
 `;
 
+export const ElfsightSlot = styled.div`
+  position: relative;
+  z-index: 2;
+  margin-bottom: 1rem;
+`;
+
 export const WaveWrap = styled.div`
   position: relative;
   z-index: 1;

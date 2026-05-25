@@ -1,7 +1,8 @@
 import { PauseCircleOutlined, PlayCircleOutlined, TeamOutlined } from '@ant-design/icons';
 import { Button, Space } from 'antd';
 import { motion } from 'framer-motion';
-import { useDrLakesAudio, useDrLakesHeroAudio } from '../../context/DrLakesAudioContext';
+import ElfsightAudioPlayer from '../../components/ElfsightAudioPlayer';
+import { useElfsightAudio } from '../../context/ElfsightAudioContext';
 import { links } from '../../config/links';
 import { staggerHero, fadeUp } from '../../motion/variants';
 import * as S from './index.style';
@@ -11,8 +12,7 @@ const waveHeights = [20, 32, 48, 26, 58, 36, 52, 24, 56, 34, 44, 22, 50, 30, 40]
 const chips = ['Media & hosting', 'A&R & development', 'Coaching', 'Partnerships'] as const;
 
 export default function Hero() {
-  useDrLakesHeroAudio();
-  const { isPlaying, togglePlayback } = useDrLakesAudio();
+  const { isPlaying, togglePlayback, registerWidget } = useElfsightAudio();
 
   return (
     <S.Section id="top">
@@ -90,15 +90,20 @@ export default function Hero() {
                 <S.VisualLabel>Signal</S.VisualLabel>
                 <S.VisualStatus>Live energy</S.VisualStatus>
               </S.VisualTop>
+              <S.ElfsightSlot>
+                <ElfsightAudioPlayer variant="visible" onMount={registerWidget} />
+              </S.ElfsightSlot>
               <S.WaveWrap aria-hidden>
                 {waveHeights.map((h, i) => (
                   <S.WaveBar
                     key={i}
                     style={{ height: h }}
-                    animate={{ scaleY: [0.28, 1, 0.42, 0.95, 0.28] }}
+                    animate={{
+                      scaleY: isPlaying ? [0.28, 1, 0.42, 0.95, 0.28] : 0.35,
+                    }}
                     transition={{
                       duration: 0.9 + i * 0.04,
-                      repeat: Infinity,
+                      repeat: isPlaying ? Infinity : 0,
                       ease: 'easeInOut',
                       delay: i * 0.06,
                     }}
